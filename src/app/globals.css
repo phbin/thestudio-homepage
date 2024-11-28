@@ -1,13 +1,6 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #121212; /* Nền mặc định đen */
+  --foreground: #ffffff; /* Chữ mặc định trắng */
 }
 
 html,
@@ -17,9 +10,9 @@ body {
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--foreground); /* Áp dụng màu chữ */
+  background: var(--background); /* Áp dụng màu nền */
+  font-family: 'GeistVF', sans-serif; /* Sử dụng font GeistVF */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -31,12 +24,7 @@ body {
 }
 
 a {
-  color: inherit;
+  color: var(--foreground);
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}

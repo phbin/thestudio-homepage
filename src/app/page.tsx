@@ -1,104 +1,187 @@
-'use client';
+"use client";
+import { useEffect, useState } from "react";
+import { Box, Container, Typography, Button } from "@mui/material";
 import Image from "next/image";
-import { Container, Box, Typography, Button } from '@mui/material';
-import { makeStyles } from 'tss-react/mui';
-import StudioImage from "../assets/image.jpg"
-const useStyles = makeStyles()((theme) => ({
-  header: {
-    textAlign: 'center',
-    marginBottom: theme.spacing(4),
-  },
-  title: {
-    fontWeight: 700,
-    fontSize: '2.5rem',
-    [theme.breakpoints.up('md')]: {
-      fontSize: '3rem',
-    },
-  },
-  subtitle: {
-    color: theme.palette.text.secondary,
-  },
-  aboutSection: {
-    marginTop: theme.spacing(6),
-    display: 'flex', // Sử dụng Flexbox
-    flexDirection: 'column',
-    gap: theme.spacing(4),
-    [theme.breakpoints.up('md')]: {
-      flexDirection: 'row',
-    },
-  },
-  textContent: {
-    flex: 1,
-  },
-  imageContainer: {
-    flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  image: {
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-    width: '100%',
-    maxWidth: '400px',
-  },
-  footer: {
-    textAlign: 'center',
-    marginTop: theme.spacing(6),
-    padding: theme.spacing(2, 0),
-    backgroundColor: theme.palette.grey[100],
-  },
-}));
+import StudioImage from "../../public/assets/studio-bg.jpg";
+import LogoImage from "../../public/assets/logo.png"; // Đường dẫn đến logo
+import SmokeEffect from "../components/SmokeEffect";
 
 export default function Home() {
-  const { classes } = useStyles();
+  const [scrollProgress, setScrollProgress] = useState(0); // Scroll progress (0 -> 1)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+
+      // Calculate scroll progress (0 at the top, 1 when scrolled enough)
+      const progress = Math.min(scrollY / (windowHeight * 0.8), 1);
+      setScrollProgress(progress);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  // Properties that change based on scroll progress
+  const scale = 1 + 0.6 * scrollProgress; // Zoom out effect from 1 -> 1.6
+  const opacity = 1 - scrollProgress; // Gradually fade out title as scrolling down
 
   return (
-    <Container maxWidth="lg">
-      {/* Header */}
-      <Box component="header" className={classes.header}>
-        <Typography variant="h2" component="h1" className={classes.title} gutterBottom>
-          Welcome to Our Studio
-        </Typography>
-        <Typography variant="subtitle1" className={classes.subtitle}>
-          Creating innovative designs and unique experiences for you.
-        </Typography>
+    <Box
+      sx={{
+        minHeight: "200vh", // Ensures enough space for scrolling
+        padding: "50px", // General padding
+        boxSizing: "border-box",
+        backgroundColor: "#000", // Set black background
+        color: "#fff", // Set white text color
+      }}
+    >
+      {/* Studio Background */}
+      <Box
+        sx={{
+          position: "relative", // Keeps its position
+          width: "100%", // Keeps original size
+          height: "70vh", // Maintains height
+          overflow: "hidden",
+          borderRadius: "30px", // Rounded corners
+          transform: `scale(${scale})`, // Gradually zooms out
+          transformOrigin: "center center", // Scales from the center
+          transition: "transform 0.4s ease", // Smooth animation
+        }}
+      >
+        {/* Studio Image */}
+        <Box
+          sx={{
+            position: "relative",
+            width: "100%",
+            height: "100%",
+            borderRadius: "30px", // Matches outer border radius
+            overflow: "hidden",
+          }}
+        >
+          <Image
+            src={StudioImage}
+            alt="Studio background"
+            layout="fill"
+            objectFit="cover"
+          />
+        </Box>
+
+        {/* Smoke Effect */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            zIndex: 1,
+          }}
+        >
+          <SmokeEffect />
+        </Box>
+
+        {/* Title */}
+        <Container
+          maxWidth="lg"
+          sx={{
+            position: "absolute",
+            top: "50%",
+            transform: "translateY(-50%)",
+            textAlign: "center",
+            zIndex: 2,
+            color: "white",
+            opacity: opacity, // Gradually fades out
+            transition: "opacity 0.4s ease",
+          }}
+        >
+          <Typography variant="h1" gutterBottom>
+            Thé Studio
+          </Typography>
+          <Typography variant="h6">
+            Creating innovative designs and unique experiences for you.
+          </Typography>
+        </Container>
       </Box>
 
-      {/* About Section */}
-      <Box className={classes.aboutSection}>
-        {/* Text Content */}
-        <Box className={classes.textContent}>
+      {/* Additional Information Section */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between", // Aligns left, center, and right elements
+          padding: "20px 0",
+          marginTop: "20px", // Tạo khoảng cách giữa Studio Background và phần thông tin
+          backgroundColor: "#000", // Black background
+          color: "#fff", // White text
+          borderRadius: "30px", // Rounded edges
+          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.5)", // Shadow effect
+          zIndex: 2, // Đặt lớp hiển thị cao hơn Studio Background
+          position: "relative", // Đảm bảo z-index hoạt động
+        }}
+      >
+        {/* Studio Name (Left) */}
+        <Box sx={{ flex: 1, textAlign: "left", padding: "0 20px" }}>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            Dream Studio
+          </Typography>
+          <Typography variant="body2">
+            Your creative hub for innovation and design.
+          </Typography>
+        </Box>
+
+        {/* Logo (Center) */}
+        <Box sx={{ flex: 1, textAlign: "center" }}>
+          <Image
+            src={LogoImage}
+            alt="Studio Logo"
+            width={80}
+            height={80}
+            style={{
+              borderRadius: "50%", // Makes the logo circular
+            }}
+          />
+        </Box>
+
+        {/* Booking Button (Right) */}
+        <Box sx={{ flex: 1, textAlign: "right", padding: "0 20px" }}>
+          <Button
+            variant="contained"
+            color="secondary"
+            sx={{
+              padding: "10px 20px",
+              borderRadius: "30px",
+              textTransform: "none", // Prevents uppercase text
+              fontWeight: "bold",
+            }}
+          >
+            Booking Now
+          </Button>
+        </Box>
+      </Box>
+
+      {/* Content below */}
+      <Box
+        sx={{
+          padding: "50px 20px",
+          marginTop: "50px", // Appears after additional information
+          textAlign: "center",
+        }}
+      >
+        <Container maxWidth="lg">
           <Typography variant="h4" gutterBottom>
             About Our Studio
           </Typography>
-          <Typography variant="body1" paragraph>
-            Our studio specializes in crafting visually stunning and functional
-            designs that captivate and inspire. With years of experience, we
-            bring creativity and precision to every project we work on.
+          <Typography variant="body1">
+            At Our Studio, we specialize in creating innovative designs and
+            delivering unique experiences. Our team of professionals is
+            dedicated to bringing your vision to life.
           </Typography>
-          <Button variant="contained" color="primary" size="large">
-            Learn More
-          </Button>
-        </Box>
-
-        {/* Image */}
-        <Box className={classes.imageContainer}>
-          <Image
-            src={StudioImage}
-            alt="Studio workspace"
-            className={classes.image}
-            width={400}
-            height={300}
-          />
-        </Box>
+        </Container>
       </Box>
-
-      {/* Footer */}
-      <Box component="footer" className={classes.footer}>
-        <Typography variant="body2" color="textSecondary">
-          © 2024 Our Studio. All rights reserved.
-        </Typography>
-      </Box>
-    </Container>
+    </Box>
   );
 }
