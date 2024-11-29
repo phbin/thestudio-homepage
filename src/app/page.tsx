@@ -1,76 +1,73 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState  } from "react";
 import { Box, Container, Typography, Button } from "@mui/material";
 import Image from "next/image";
 import StudioImage from "../../public/assets/studio-bg.jpg";
-import LogoImage from "../../public/assets/logo.png"; // Đường dẫn đến logo
+import LogoImage from "../../public/assets/logo.png";
 import SmokeEffect from "../components/SmokeEffect";
+import TunnelImages from "../components/TunnelImages";
 
 export default function Home() {
-  const [scrollProgress, setScrollProgress] = useState(0); // Scroll progress (0 -> 1)
+  const [scrollProgress, setScrollProgress] = useState(0); 
 
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
 
-      // Calculate scroll progress (0 at the top, 1 when scrolled enough)
       const progress = Math.min(scrollY / (windowHeight * 0.8), 1);
       setScrollProgress(progress);
-    };
-
+    }
+    
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  // Properties that change based on scroll progress
-  const scale = 1 + 0.6 * scrollProgress; // Zoom out effect from 1 -> 1.6
-  const opacity = 1 - scrollProgress; // Gradually fade out title as scrolling down
+  const scale = 1 + 0.6 * scrollProgress; 
+  const opacity = 1 - scrollProgress; 
 
   return (
+    <Box>
     <Box
       sx={{
-        minHeight: "200vh", // Ensures enough space for scrolling
-        padding: "50px", // General padding
+        padding: { xs: "10px", sm: "50px" }, 
         boxSizing: "border-box",
-        backgroundColor: "#000", // Set black background
-        color: "#fff", // Set white text color
+        backgroundColor: "#000", 
+        color: "#fff", 
+        height:"100vh"
       }}
     >
-      {/* Studio Background */}
       <Box
         sx={{
-          position: "relative", // Keeps its position
-          width: "100%", // Keeps original size
-          height: "70vh", // Maintains height
+          position: "relative", 
+          width: "100%",
+          height: "70vh", 
           overflow: "hidden",
-          borderRadius: "30px", // Rounded corners
-          transform: `scale(${scale})`, // Gradually zooms out
-          transformOrigin: "center center", // Scales from the center
-          transition: "transform 0.4s ease", // Smooth animation
+          borderRadius: "30px", 
+          transform: `scale(${scale})`, 
+          transformOrigin: "center center", 
+          transition: "transform 0.4s ease", 
         }}
       >
-        {/* Studio Image */}
         <Box
           sx={{
             position: "relative",
             width: "100%",
             height: "100%",
-            borderRadius: "30px", // Matches outer border radius
+            borderRadius: "30px", 
             overflow: "hidden",
           }}
         >
           <Image
             src={StudioImage}
             alt="Studio background"
-            layout="fill"
-            objectFit="cover"
+            fill
+            style={{ objectFit: "cover" }}
           />
         </Box>
 
-        {/* Smoke Effect */}
         <Box
           sx={{
             position: "absolute",
@@ -84,7 +81,6 @@ export default function Home() {
           <SmokeEffect />
         </Box>
 
-        {/* Title */}
         <Container
           maxWidth="lg"
           sx={{
@@ -94,7 +90,7 @@ export default function Home() {
             textAlign: "center",
             zIndex: 2,
             color: "white",
-            opacity: opacity, // Gradually fades out
+            opacity: opacity, 
             transition: "opacity 0.4s ease",
           }}
         >
@@ -106,55 +102,71 @@ export default function Home() {
           </Typography>
         </Container>
       </Box>
-
-      {/* Additional Information Section */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between", // Aligns left, center, and right elements
-          padding: "20px 0",
-          marginTop: "20px", // Tạo khoảng cách giữa Studio Background và phần thông tin
-          backgroundColor: "#000", // Black background
-          color: "#fff", // White text
-          borderRadius: "30px", // Rounded edges
-          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.5)", // Shadow effect
-          zIndex: 2, // Đặt lớp hiển thị cao hơn Studio Background
-          position: "relative", // Đảm bảo z-index hoạt động
+          justifyContent: "space-between", 
+          padding: { xs: "10px 0", sm: "20px 0" }, 
+          backgroundColor: "#000", 
+          color: "#fff", 
+          borderRadius: "30px",
+          boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.5)",
+          zIndex: 2,
+          position: "relative",
         }}
       >
-        {/* Studio Name (Left) */}
-        <Box sx={{ flex: 1, textAlign: "left", padding: "0 20px" }}>
-          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
-            Dream Studio
-          </Typography>
-          <Typography variant="body2">
-            Your creative hub for innovation and design.
+        <Box
+          sx={{
+            flex: 1,
+            textAlign: "left",
+            padding: { xs: "0 10px", sm: "0 20px" }, 
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: "bold",
+              fontSize: { xs: "16px", sm: "24px" }, 
+            }}
+          >
+            Thé Studio
           </Typography>
         </Box>
 
-        {/* Logo (Center) */}
-        <Box sx={{ flex: 1, textAlign: "center" }}>
+        <Box
+          sx={{
+            textAlign: "center",
+            display:"flex",
+            alignItems:"center"
+          }}
+        >
           <Image
             src={LogoImage}
             alt="Studio Logo"
-            width={80}
-            height={80}
+            width={50} 
+            height={50}
             style={{
-              borderRadius: "50%", // Makes the logo circular
+              borderRadius: "50%",
             }}
           />
         </Box>
 
-        {/* Booking Button (Right) */}
-        <Box sx={{ flex: 1, textAlign: "right", padding: "0 20px" }}>
+        <Box
+          sx={{
+            flex: 1,
+            textAlign: "right",
+            padding: { xs: "0 10px", sm: "0 20px" }, 
+          }}
+        >
           <Button
             variant="contained"
             color="secondary"
             sx={{
-              padding: "10px 20px",
-              borderRadius: "30px",
-              textTransform: "none", // Prevents uppercase text
+              padding: { xs: "6px 12px", sm: "10px 20px" }, 
+              fontSize: { xs: "12px", sm: "16px" }, 
+              borderRadius: "20px", 
+              textTransform: "none",
               fontWeight: "bold",
             }}
           >
@@ -162,18 +174,15 @@ export default function Home() {
           </Button>
         </Box>
       </Box>
-
-      {/* Content below */}
       <Box
         sx={{
           padding: "50px 20px",
-          marginTop: "50px", // Appears after additional information
           textAlign: "center",
         }}
       >
         <Container maxWidth="lg">
           <Typography variant="h4" gutterBottom>
-            About Our Studio
+            About Thé Studio
           </Typography>
           <Typography variant="body1">
             At Our Studio, we specialize in creating innovative designs and
@@ -182,6 +191,11 @@ export default function Home() {
           </Typography>
         </Container>
       </Box>
+      
+    </Box>
+    <Box    >
+      <TunnelImages />
+    </Box>
     </Box>
   );
 }

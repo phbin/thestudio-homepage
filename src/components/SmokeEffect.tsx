@@ -30,7 +30,7 @@ function SmokeParticles() {
             -6, 
             -1, 
           ]}
-          scale={1.8}
+          scale={1.8} 
         >
           <planeGeometry args={[40, 20]} /> 
           <meshLambertMaterial
